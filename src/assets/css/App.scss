@@ -17,12 +17,30 @@
   position: relative;
   width: 100%;
   height: 100%;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/bg5.jpg");
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: saturation;
+    filter: contrast(150%) blur(3px);
+  }
+  .gameTime {
+    position: relative;
+  }
   .monsterList {
+    position: relative;
     height: calc(100% - 50px);
     display: flex;
     flex-direction: column-reverse;
     .monsterItem {
       display: flex;
+      margin-top: -5px;
     }
     .left {
       margin-right: auto;
@@ -48,5 +66,16 @@
         border: 1px solid black;
       }
     }
+  }
+  .countdown {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 150px;
+    color: white;
   }
 }

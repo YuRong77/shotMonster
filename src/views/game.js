@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+// import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { v4 as uuidv4 } from "uuid";
 import monster1 from "../assets/img/monster1.png";
 import monster2 from "../assets/img/monster2.png";
 import monster3 from "../assets/img/monster3.png";
@@ -6,41 +9,94 @@ import monster4 from "../assets/img/monster4.png";
 import monster5 from "../assets/img/monster5.png";
 
 const Game = () => {
+  const navigate = useNavigate();
   const [monsterList, setMonsterList] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
-  // const [countdown, setCountdown] = useState(3);
-  // const [gameStart, setGameStart] = useState(false);
+  const [pointList, setPointList] = useState([]);
+  const [countdown, setCountdown] = useState(3);
+  const [gameTime, setGameTime] = useState(300);
+  const [gameStart, setGameStart] = useState(false);
+  // const [gamePause, setGamePause] = useState(false);
+  const [gameEnd, setGameEnd] = useState(false);
+  const [failPunish, setFailPunish] = useState(false);
 
   const shotMonster = useCallback(
     (position) => {
+      if (!gameStart || failPunish || gameEnd) return;
       if (monsterList[0].position === position) {
         setMonsterList((val) => val.slice(1));
+        setPointList((val) => [...val, ...[monsterList[0]]]);
       } else {
+        setFailPunish(true);
         console.log("fail!!!");
       }
     },
-    [monsterList]
+    [monsterList, gameStart, failPunish]
   );
 
+  //開始前倒數
+  useEffect(() => {
+    if (countdown < 1) return setGameStart(true);
+    const timer = setInterval(() => {
+      setCountdown((val) => val - 1);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [countdown]);
+
+  //遊戲時間倒數
+  useEffect(() => {
+    if (!gameStart) return;
+    if (gameTime <= 0) return setGameEnd(true);
+    const timer = setInterval(() => {
+      setGameTime((val) => val - 1);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [gameStart, gameTime]);
+
+  //當前等級怪物<15隻，增加一級難度
   useEffect(() => {
     if (monsterList.length !== 0 && monsterList.length > 15) return;
     if (monsterList.length === 0) return setCurrentLevel(1);
     setCurrentLevel((val) => val + 1);
   }, [monsterList]);
 
+  //每升一級難度加入新怪獸
   useEffect(() => {
     if (!currentLevel) return;
     const newMonsterList = [];
-    for (let i = 1; i < 30; i++) {
+    for (let i = 1; i <= 30; i++) {
       const randomNum = Math.floor(Math.random() * 3) + 1;
       newMonsterList.push({
         position: randomNum,
         level: currentLevel > 5 ? 5 : currentLevel,
+        id: uuidv4(),
       });
     }
     setMonsterList((val) => [...val, ...newMonsterList]);
   }, [currentLevel]);
 
+  //失敗懲罰時間一秒
+  useEffect(() => {
+    if (!failPunish) return;
+    const timer = setTimeout(() => {
+      setFailPunish(false);
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [failPunish]);
+
+  //遊戲結束至結算頁
+  useEffect(() => {
+    if (!gameEnd) return;
+    navigate("/scoreboard", { state: { pointList: pointList } });
+  }, [gameEnd]);
+
+  //電腦版按鍵事件
   useEffect(() => {
     function keyDown(e) {
       if (e.key === "ArrowLeft") return shotMonster(1);
@@ -55,12 +111,14 @@ const Game = () => {
 
   return (
     <div className="gamePage">
+      <div className="gameTime">{gameTime}</div>
       <div className="monsterList">
-        {monsterList.map((item, index) => (
-          <MonsterItem item={item} key={index} />
+        {monsterList.map((item) => (
+          <MonsterItem item={item} key={item.id} />
         ))}
       </div>
       <Footer shotMonster={shotMonster} />
+      {countdown > 0 && <div className="countdown">{countdown}</div>}
     </div>
   );
 };
@@ -80,9 +138,13 @@ const MonsterItem = (props) => {
     if (position === 3) return "right";
   }
   return (
-    <div className={`monsterItem ${getMonsterClass(props.item.position)}`}>
-      <div>
-        <img src={getMonsterImg(props.item.level)} alt="" />
+    <div>
+      <div className="monsterItem">
+        <img
+          className={getMonsterClass(props.item.position)}
+          src={getMonsterImg(props.item.level)}
+          alt=""
+        />
       </div>
     </div>
   );
