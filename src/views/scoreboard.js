@@ -2,7 +2,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const Scoreboard = () => {
   const navigate = useNavigate();
-  // const { state } = useLocation();
+  const { state } = useLocation();
+  console.log(state);
   return (
     <div>
       <h1>board</h1>

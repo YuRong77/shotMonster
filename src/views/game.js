@@ -14,7 +14,7 @@ const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(null);
   const [pointList, setPointList] = useState([]);
   const [countdown, setCountdown] = useState(3);
-  const [gameTime, setGameTime] = useState(300);
+  const [gameTime, setGameTime] = useState(30);
   const [gameStart, setGameStart] = useState(false);
   // const [gamePause, setGamePause] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
@@ -28,10 +28,9 @@ const Game = () => {
         setPointList((val) => [...val, ...[monsterList[0]]]);
       } else {
         setFailPunish(true);
-        console.log("fail!!!");
       }
     },
-    [monsterList, gameStart, failPunish]
+    [monsterList, gameStart, failPunish, gameEnd]
   );
 
   //開始前倒數
@@ -84,7 +83,7 @@ const Game = () => {
     if (!failPunish) return;
     const timer = setTimeout(() => {
       setFailPunish(false);
-    }, 1000);
+    }, 450);
     return () => {
       clearTimeout(timer);
     };
@@ -94,7 +93,7 @@ const Game = () => {
   useEffect(() => {
     if (!gameEnd) return;
     navigate("/scoreboard", { state: { pointList: pointList } });
-  }, [gameEnd]);
+  }, [gameEnd, navigate, pointList]);
 
   //電腦版按鍵事件
   useEffect(() => {
@@ -111,10 +110,16 @@ const Game = () => {
 
   return (
     <div className="gamePage">
-      <div className="gameTime">{gameTime}</div>
+      <div className="gameTime">
+        <div>{gameTime}</div>
+      </div>
       <div className="monsterList">
-        {monsterList.map((item) => (
-          <MonsterItem item={item} key={item.id} />
+        {monsterList.map((item, index) => (
+          <MonsterItem
+            item={item}
+            isFail={index === 0 && failPunish}
+            key={item.id}
+          />
         ))}
       </div>
       <Footer shotMonster={shotMonster} />
@@ -138,14 +143,12 @@ const MonsterItem = (props) => {
     if (position === 3) return "right";
   }
   return (
-    <div>
-      <div className="monsterItem">
-        <img
-          className={getMonsterClass(props.item.position)}
-          src={getMonsterImg(props.item.level)}
-          alt=""
-        />
-      </div>
+    <div className={`monsterItem ${props.isFail ? "failJump" : ""}`}>
+      <img
+        className={getMonsterClass(props.item.position)}
+        src={getMonsterImg(props.item.level)}
+        alt=""
+      />
     </div>
   );
 };
@@ -155,13 +158,13 @@ const Footer = (props) => {
     <div className="footer">
       <div className="footerBtnGroup">
         <div className="footerBtn" onClick={() => props.shotMonster(1)}>
-          1
+          <div></div>
         </div>
         <div className="footerBtn" onClick={() => props.shotMonster(2)}>
-          2
+          <div></div>
         </div>
         <div className="footerBtn" onClick={() => props.shotMonster(3)}>
-          3
+          <div></div>
         </div>
       </div>
     </div>
