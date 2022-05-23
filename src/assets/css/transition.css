@@ -1,0 +1,9 @@
+.pointImg-exit {
+  opacity: 0.3;
+  max-height: 240px;
+}
+.pointImg-exit-active {
+  opacity: 0;
+  max-height: 0px;
+  transition: all 0.15s linear;
+}

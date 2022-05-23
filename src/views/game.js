@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-// import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { v4 as uuidv4 } from "uuid";
 import monster1 from "../assets/img/monster1.png";
 import monster2 from "../assets/img/monster2.png";
@@ -92,7 +91,9 @@ const Game = () => {
   //遊戲結束至結算頁
   useEffect(() => {
     if (!gameEnd) return;
-    navigate("/scoreboard", { state: { pointList: pointList } });
+    setTimeout(() => {
+      navigate("/scoreboard", { state: { pointList: pointList } });
+    }, 2000);
   }, [gameEnd, navigate, pointList]);
 
   //電腦版按鍵事件
@@ -124,6 +125,7 @@ const Game = () => {
       </div>
       <Footer shotMonster={shotMonster} />
       {countdown > 0 && <div className="countdown">{countdown}</div>}
+      {gameEnd && <div className="timeUp">time up</div>}
     </div>
   );
 };
