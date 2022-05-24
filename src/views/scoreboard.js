@@ -52,8 +52,8 @@ const Scoreboard = () => {
           <div className="pointRecordBox">
             <div className="comments">魔法師的手速!</div>
             <div className="menuBtn">
-              <div onClick={() => navigate("/game")}>game</div>
-              <div onClick={() => navigate("/home")}>home</div>
+              <div onClick={() => navigate("/game")}>再次挑戰</div>
+              <div onClick={() => navigate("/home")}>回到大廳</div>
             </div>
           </div>
         </div>

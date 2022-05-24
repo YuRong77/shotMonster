@@ -66,7 +66,7 @@ const Game = () => {
   useEffect(() => {
     if (!currentLevel) return;
     const newMonsterList = [];
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= 35; i++) {
       const randomNum = Math.floor(Math.random() * 3) + 1;
       newMonsterList.push({
         position: randomNum,
@@ -159,13 +159,13 @@ const Footer = (props) => {
   return (
     <div className="footer">
       <div className="footerBtnGroup">
-        <div className="footerBtn" onClick={() => props.shotMonster(1)}>
+        <div className="footerBtn" onTouchStart={() => props.shotMonster(1)}>
           <div></div>
         </div>
-        <div className="footerBtn" onClick={() => props.shotMonster(2)}>
+        <div className="footerBtn" onTouchStart={() => props.shotMonster(2)}>
           <div></div>
         </div>
-        <div className="footerBtn" onClick={() => props.shotMonster(3)}>
+        <div className="footerBtn" onTouchStart={() => props.shotMonster(3)}>
           <div></div>
         </div>
       </div>

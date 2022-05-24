@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <div>
-      <h1>home</h1>
-      <button onClick={() => navigate("/game")}>start game</button>
+    <div className="homePage">
+      <div className="title">
+        <h1>shotMonster</h1>
+      </div>
+      <div className="btnBox">
+        <div className="startBtn" onClick={() => navigate("/game")}>
+          開始遊戲
+        </div>
+      </div>
     </div>
   );
 };
