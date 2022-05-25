@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "../assets/css/transition.css";
@@ -17,9 +17,12 @@ const Scoreboard = () => {
   const [countEnd, setCountEnd] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setCountStart(true);
     }, 550);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -53,7 +56,7 @@ const Scoreboard = () => {
             <div className="comments">魔法師的手速!</div>
             <div className="menuBtn">
               <div onClick={() => navigate("/game")}>再次挑戰</div>
-              <div onClick={() => navigate("/home")}>回到大廳</div>
+              <div onClick={() => navigate("/home")}>回到首頁</div>
             </div>
           </div>
         </div>

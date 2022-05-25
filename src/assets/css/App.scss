@@ -2,13 +2,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  //關閉長按
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+//禁止點擊
+img {
+  pointer-events: none;
+  max-width: 100%;
 }
 @font-face {
   font-family: setofont;
   src: url(../font/setofont.ttf);
 }
 .myApp {
-  background: rgb(18, 21, 31);
   height: 100vh;
   .gameArea {
     max-width: 800px;
@@ -97,6 +106,9 @@
       box-shadow: 0px 1px 10px 0 rgba(255, 255, 255, 0.8);
       cursor: pointer;
       margin: auto;
+      &:hover {
+        box-shadow: 0px 1px 15px 0 rgba(255, 255, 255, 0.8);
+      }
     }
   }
 }
@@ -387,6 +399,9 @@
           font-size: 20px;
           cursor: pointer;
           margin-bottom: 25px;
+          &:hover {
+            box-shadow: 0px 1px 15px 0 rgba(255, 255, 255, 0.8);
+          }
         }
       }
     }
