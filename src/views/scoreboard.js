@@ -8,13 +8,19 @@ import monster3 from "../assets/img/monster3.png";
 import monster4 from "../assets/img/monster4.png";
 import monster5 from "../assets/img/monster5.png";
 
-const Scoreboard = () => {
+const Scoreboard = (props) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [point, setPoint] = useState(0);
   const [pointList, setPointList] = useState(state ? state.pointList : []);
   const [countStart, setCountStart] = useState(false);
   const [countEnd, setCountEnd] = useState(false);
+
+  function getComments() {
+    if (point <= 4200) return "加油好嗎，我阿嬤都比你強= =";
+    if (point <= 7000) return "豪快的反應R~";
+    return "魔法師的手速!";
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -53,10 +59,25 @@ const Scoreboard = () => {
       {countEnd && (
         <div className="pointRecord">
           <div className="pointRecordBox">
-            <div className="comments">魔法師的手速!</div>
+            <div className="comments">{getComments()}</div>
             <div className="menuBtn">
-              <div onClick={() => navigate("/game")}>再次挑戰</div>
-              <div onClick={() => navigate("/home")}>回到首頁</div>
+              <div
+                onClick={() => {
+                  props.btn.current.play();
+                  props.setIsClickStart(true);
+                  navigate("/game");
+                }}
+              >
+                再次挑戰
+              </div>
+              <div
+                onClick={() => {
+                  props.btn.current.play();
+                  navigate("/home");
+                }}
+              >
+                回到首頁
+              </div>
             </div>
           </div>
         </div>

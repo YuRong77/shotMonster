@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import monster1 from "../assets/img/monster1.png";
@@ -7,13 +7,12 @@ import monster3 from "../assets/img/monster3.png";
 import monster4 from "../assets/img/monster4.png";
 import monster5 from "../assets/img/monster5.png";
 
-const Game = () => {
+const Game = (props) => {
   const navigate = useNavigate();
   const [monsterList, setMonsterList] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
   const [pointList, setPointList] = useState([]);
   const [countdown, setCountdown] = useState(3);
-  const [gameTime, setGameTime] = useState(30);
   const [gameStart, setGameStart] = useState(false);
   // const [gamePause, setGamePause] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
@@ -21,6 +20,9 @@ const Game = () => {
 
   const shotMonster = useCallback(
     (position) => {
+      props.shot.current.currentTime = 0;
+      props.shot.current.volume = 0.1;
+      props.shot.current.play();
       if (!gameStart || failPunish || gameEnd) return;
       if (monsterList[0].position === position) {
         setMonsterList((val) => val.slice(1));
@@ -29,7 +31,7 @@ const Game = () => {
         setFailPunish(true);
       }
     },
-    [monsterList, gameStart, failPunish, gameEnd]
+    [monsterList, gameStart, failPunish, gameEnd, props.shot]
   );
 
   //開始前倒數
@@ -42,18 +44,6 @@ const Game = () => {
       clearInterval(timer);
     };
   }, [countdown]);
-
-  //遊戲時間倒數
-  useEffect(() => {
-    if (!gameStart) return;
-    if (gameTime <= 0) return setGameEnd(true);
-    const timer = setInterval(() => {
-      setGameTime((val) => val - 1);
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [gameStart, gameTime]);
 
   //當前等級怪物<15隻，增加一級難度
   useEffect(() => {
@@ -80,13 +70,16 @@ const Game = () => {
   //失敗懲罰時間一秒
   useEffect(() => {
     if (!failPunish) return;
+    props.jump.current.currentTime = 0;
+    props.jump.current.volume = 0.2;
+    props.jump.current.play();
     const timer = setTimeout(() => {
       setFailPunish(false);
     }, 450);
     return () => {
       clearTimeout(timer);
     };
-  }, [failPunish]);
+  }, [failPunish, props.jump]);
 
   //遊戲結束至結算頁
   useEffect(() => {
@@ -95,6 +88,18 @@ const Game = () => {
       navigate("/scoreboard", { state: { pointList: pointList } });
     }, 2000);
   }, [gameEnd, navigate, pointList]);
+
+  //bgm
+  useEffect(() => {
+    if (!props.isClickStart) return navigate("/home");
+    if (gameEnd) return props.bgm.current.pause();
+    props.bgm.current.currentTime = 0;
+    props.bgm.current.volume = 0.04;
+    props.bgm.current.play();
+    return () => {
+      props.bgm.current.pause();
+    };
+  }, [props.isClickStart, props.bgm, navigate, gameEnd]);
 
   //電腦版按鍵事件
   useEffect(() => {
@@ -111,9 +116,7 @@ const Game = () => {
 
   return (
     <div className="gamePage">
-      <div className="gameTime">
-        <div>{gameTime}</div>
-      </div>
+      <GameTime gameStart={gameStart} setGameEnd={setGameEnd} />
       <div className="monsterList">
         {monsterList.map((item, index) => (
           <MonsterItem
@@ -129,9 +132,29 @@ const Game = () => {
     </div>
   );
 };
-export default Game;
+export default memo(Game);
 
-const MonsterItem = (props) => {
+const GameTime = memo((props) => {
+  const [gameTime, setGameTime] = useState(30);
+  const { gameStart, setGameEnd } = props;
+  useEffect(() => {
+    if (!gameStart) return;
+    if (gameTime <= 0) return setGameEnd(true);
+    const timer = setInterval(() => {
+      setGameTime((val) => val - 1);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [gameStart, gameTime, setGameEnd]);
+  return (
+    <div className="gameTime">
+      <div>{gameTime}</div>
+    </div>
+  );
+});
+
+const MonsterItem = memo((props) => {
   function getMonsterImg(level) {
     if (level === 1) return monster1;
     if (level === 2) return monster2;
@@ -153,9 +176,9 @@ const MonsterItem = (props) => {
       />
     </div>
   );
-};
+});
 
-const Footer = (props) => {
+const Footer = memo((props) => {
   return (
     <div className="footer">
       <div className="footerBtnGroup">
@@ -171,4 +194,4 @@ const Footer = (props) => {
       </div>
     </div>
   );
-};
+});

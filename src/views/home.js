@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = (props) => {
   const navigate = useNavigate();
   return (
     <div className="homePage">
@@ -8,7 +8,14 @@ const Home = () => {
         <h1>shotMonster</h1>
       </div>
       <div className="btnBox">
-        <div className="startBtn" onClick={() => navigate("/game")}>
+        <div
+          className="startBtn"
+          onClick={() => {
+            props.btn.current.play();
+            props.setIsClickStart(true);
+            navigate("/game");
+          }}
+        >
           開始遊戲
         </div>
       </div>
