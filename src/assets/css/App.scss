@@ -60,7 +60,7 @@ img {
     display: flex;
     height: 50%;
     h1 {
-      font-family: setofont;
+      font-family: setofont, sans-serif;
       font-size: 120px;
       @media (max-width: 600px) {
         font-size: 60px;
@@ -307,7 +307,7 @@ img {
     h1 {
       margin-bottom: 10px;
       font-size: 100px;
-      font-family: setofont;
+      font-family: setofont, sans-serif;
       background: linear-gradient(to top, #ffd968, #ff733e, #f7ba00);
       background-clip: text;
       color: transparent;
