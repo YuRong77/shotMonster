@@ -12,6 +12,9 @@ const Scoreboard = (props) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [point, setPoint] = useState(0);
+  const [bestRecord, setBestRecord] = useState(
+    window.localStorage.getItem("monsterPoint") || 0
+  );
   const [pointList, setPointList] = useState(state ? state.pointList : []);
   const [countStart, setCountStart] = useState(false);
   const [countEnd, setCountEnd] = useState(false);
@@ -23,31 +26,45 @@ const Scoreboard = (props) => {
   }
 
   useEffect(() => {
+    if (!props.isClickStart) return navigate("/home");
     const timer = setTimeout(() => {
       setCountStart(true);
-    }, 550);
+    }, 500);
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [props.isClickStart, navigate]);
 
   useEffect(() => {
     if (!countStart) return;
     if (pointList.length === 0) return setCountEnd(true);
     const timer = setInterval(() => {
+      props.eat.current.currentTime = 0;
+      props.eat.current.play();
       setPoint((val) => val + pointList[0].level * 20);
       setPointList((val) => val.slice(1));
-    }, 150);
+    }, 100);
     return () => {
       clearInterval(timer);
     };
-  }, [countStart, pointList]);
+  }, [countStart, pointList, props.eat]);
+
+  //紀錄最佳得分
+  useEffect(() => {
+    if (!countEnd) return;
+    if (point > bestRecord) {
+      window.localStorage.setItem("monsterPoint", point);
+      setBestRecord(point);
+    }
+  }, [countEnd, point, bestRecord]);
 
   return (
     <div className="scoreboardPage">
       <div className="scoreboard">
         <h1>總分結算</h1>
-        <div>{point}</div>
+        <div className="scoreboardBox">
+          <div>{point}</div>
+        </div>
       </div>
       <TransitionGroup className="pointList">
         {pointList.map((item) => (
@@ -57,8 +74,8 @@ const Scoreboard = (props) => {
         ))}
       </TransitionGroup>
       {countEnd && (
-        <div className="pointRecord">
-          <div className="pointRecordBox">
+        <div className="pointComments">
+          <div className="pointCommentsBox">
             <div className="comments">{getComments()}</div>
             <div className="menuBtn">
               <div
@@ -82,6 +99,7 @@ const Scoreboard = (props) => {
           </div>
         </div>
       )}
+      {countEnd && <div className="bestRecord">最佳紀錄: {bestRecord}</div>}
     </div>
   );
 };

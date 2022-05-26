@@ -9,6 +9,7 @@ import bgmMusic from "./assets/sound/bgm.mp3";
 import btnSound from "./assets/sound/btnSound.mp3";
 import shotSound from "./assets/sound/shot.mp3";
 import jumpSound from "./assets/sound/jump.mp3";
+import eatSound from "./assets/sound/eating.mp3";
 import Home from "./views/home";
 import Game from "./views/game";
 import Scoreboard from "./views/scoreboard";
@@ -21,6 +22,14 @@ function App() {
   const bgm = useRef(null);
   const shot = useRef(null);
   const jump = useRef(null);
+  const eat = useRef(null);
+
+  useEffect(() => {
+    eat.current.volume = 0.1;
+    shot.current.volume = 0.1;
+    jump.current.volume = 0.2;
+    bgm.current.volume = 0.04;
+  }, [btn, bgm, shot, jump, eat]);
 
   useEffect(() => {
     if (window.screen.width < 850) return setIsDesktop(false);
@@ -60,7 +69,12 @@ function App() {
             <Route
               path="/scoreboard"
               element={
-                <Scoreboard btn={btn} setIsClickStart={setIsClickStart} />
+                <Scoreboard
+                  btn={btn}
+                  eat={eat}
+                  isClickStart={isClickStart}
+                  setIsClickStart={setIsClickStart}
+                />
               }
             ></Route>
             <Route path="*" element={<Navigate to="/home" />}></Route>
@@ -71,6 +85,7 @@ function App() {
       <audio src={shotSound} ref={shot}></audio>
       <audio src={bgmMusic} ref={bgm}></audio>
       <audio src={jumpSound} ref={jump}></audio>
+      <audio src={eatSound} ref={eat}></audio>
     </div>
   );
 }

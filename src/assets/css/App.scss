@@ -41,16 +41,17 @@ img {
     background-position: center;
     background-size: cover;
     animation: blur 10s infinite;
-    filter: contrast(90%) blur(1px);
+    // filter: contrast(90%) blur(1px);
+    filter: blur(1px);
     @keyframes blur {
       0%,
       50%,
       60%,
       100% {
-        filter: contrast(90%) blur(1px);
+        filter: blur(1px);
       }
       55% {
-        filter: contrast(90%) blur(8px);
+        filter: blur(8px);
       }
     }
   }
@@ -127,7 +128,8 @@ img {
     background-image: url("../img/bg2.png");
     background-position: center;
     background-size: cover;
-    filter: contrast(110%) blur(3px);
+    // filter: contrast(110%) blur(3px);
+    filter: blur(3px);
   }
   .gameTime {
     position: absolute;
@@ -297,25 +299,13 @@ img {
   }
   .scoreboard {
     position: relative;
-    margin: 25% auto 5% auto;
-    width: 90%;
-    height: 200px;
+    height: 40%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 8px;
-    background-image: linear-gradient(152deg, #fabc08, #fdc10a);
-    box-shadow: inset -3px -3px 3px 0 hsl(44deg 79% 46%),
-      inset 3px 3px 3px 0 #ffd96b;
-    border-radius: 3px;
-    @media (max-width: 600px) {
-      margin: 35% auto 8% auto;
-      height: 130px;
-    }
     h1 {
-      position: absolute;
-      top: -110px;
-      z-index: 100;
+      margin-bottom: 10px;
       font-size: 100px;
       font-family: setofont;
       background: linear-gradient(to top, #ffd968, #ff733e, #f7ba00);
@@ -323,28 +313,36 @@ img {
       color: transparent;
       @media (max-width: 600px) {
         font-size: 60px;
-        top: -65px;
       }
     }
-    div {
-      width: 100%;
-      height: 100%;
-      background: rgb(6 13 24);
-      border-radius: 3px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 200px;
-      font-family: "Trebuchet MS", sans-serif;
-      @media (max-width: 600px) {
-        font-size: 120px;
+    .scoreboardBox {
+      width: 90%;
+      height: 200px;
+      padding: 8px;
+      background-image: linear-gradient(152deg, #fabc08, #fdc10a);
+      box-shadow: inset -3px -3px 3px 0 hsl(44deg 79% 46%),
+        inset 3px 3px 3px 0 #ffd96b;
+      border-radius: 5px;
+      div {
+        width: 100%;
+        height: 100%;
+        background: rgb(6 13 24);
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 200px;
+        font-family: "Trebuchet MS", sans-serif;
+        @media (max-width: 600px) {
+          font-size: 120px;
+        }
       }
     }
   }
   .pointList {
     position: relative;
-    animation: rise 0.7s linear;
+    animation: rise 0.6s linear;
     @keyframes rise {
       0% {
         transform: translateY(100vh);
@@ -361,13 +359,13 @@ img {
       }
     }
   }
-  .pointRecord {
+  .pointComments {
     position: relative;
     width: 90%;
     margin: 0 auto;
     padding: 8px;
     border-radius: 3px;
-    .pointRecordBox {
+    .pointCommentsBox {
       width: 100%;
       height: 100%;
       padding: 15px;
@@ -405,5 +403,12 @@ img {
         }
       }
     }
+  }
+  .bestRecord {
+    position: absolute;
+    width: 100%;
+    color: white;
+    text-align: center;
+    bottom: 3%;
   }
 }

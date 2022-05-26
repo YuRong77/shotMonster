@@ -5,5 +5,5 @@
 .pointImg-exit-active {
   opacity: 0;
   max-height: 0px;
-  transition: all 0.15s linear;
+  transition: all 0.1s linear;
 }
