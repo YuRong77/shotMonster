@@ -8,6 +8,7 @@ const Home = (props) => {
         <h1>shotMonster</h1>
       </div>
       <div className="btnBox">
+        {props.isDesktop && <span>請使用鍵盤方向鍵遊玩</span>}
         <div
           className="startBtn"
           onClick={() => {

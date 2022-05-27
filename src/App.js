@@ -14,6 +14,7 @@ import Home from "./views/home";
 import Game from "./views/game";
 import Scoreboard from "./views/scoreboard";
 import "./assets/css/App.scss";
+// import { FpsView } from "react-fps";
 
 function App() {
   const [isDesktop, setIsDesktop] = useState(true);
@@ -29,6 +30,11 @@ function App() {
     shot.current.volume = 0.1;
     jump.current.volume = 0.2;
     bgm.current.volume = 0.04;
+    // btn.current.volume = 0;
+    // eat.current.volume = 0;
+    // shot.current.volume = 0;
+    // jump.current.volume = 0;
+    // bgm.current.volume = 0;
   }, [btn, bgm, shot, jump, eat]);
 
   useEffect(() => {
@@ -49,11 +55,18 @@ function App() {
         ></canvas>
       )}
       <div className="gameArea">
+        {/* <FpsView width={80} height={50} /> */}
         <Router>
           <Routes>
             <Route
               path="/home"
-              element={<Home btn={btn} setIsClickStart={setIsClickStart} />}
+              element={
+                <Home
+                  btn={btn}
+                  isDesktop={isDesktop}
+                  setIsClickStart={setIsClickStart}
+                />
+              }
             ></Route>
             <Route
               path="/game"
