@@ -224,6 +224,7 @@ img {
   }
   .footer {
     position: absolute;
+    z-index: 10;
     bottom: 0;
     width: 100%;
     background-image: url("../img/warning.png");
@@ -275,7 +276,9 @@ img {
     justify-content: center;
     align-items: center;
     font-size: 180px;
-    color: #ffc628;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: 2px white;
     @media (max-width: 600px) {
       font-size: 150px;
       bottom: 10vw;
@@ -290,7 +293,9 @@ img {
     justify-content: center;
     align-items: center;
     font-size: 100px;
-    color: #ffc628;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: 2px white;
     @media (max-width: 600px) {
       font-size: 80px;
       bottom: 10vw;
