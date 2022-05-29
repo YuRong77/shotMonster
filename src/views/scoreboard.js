@@ -11,6 +11,7 @@ import monster5 from "../assets/img/monster5.png";
 const Scoreboard = (props) => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { eatPlay } = props;
   const [point, setPoint] = useState(0);
   const [bestRecord, setBestRecord] = useState(
     window.localStorage.getItem("monsterPoint") || 0
@@ -39,14 +40,14 @@ const Scoreboard = (props) => {
     if (!countStart) return;
     if (pointList.length === 0) return setCountEnd(true);
     const timer = setInterval(() => {
-      props.eatPlay();
+      eatPlay();
       setPoint((val) => val + pointList[0].level * 20);
       setPointList((val) => val.slice(1));
     }, 100);
     return () => {
       clearInterval(timer);
     };
-  }, [countStart, pointList, props.eat]);
+  }, [countStart, pointList, eatPlay]);
 
   //紀錄最佳得分
   useEffect(() => {

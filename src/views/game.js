@@ -9,6 +9,7 @@ import monster5 from "../assets/img/monster5.png";
 
 const Game = (props) => {
   const navigate = useNavigate();
+  const { shotPlay, jumpPlay, bgm, stop } = props;
   const [monsterList, setMonsterList] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
   const [pointList, setPointList] = useState([]);
@@ -20,7 +21,7 @@ const Game = (props) => {
 
   const shotMonster = useCallback(
     (position) => {
-      props.shotPlay();
+      shotPlay();
       if (!gameStart || failPunish || gameEnd) return;
       if (monsterList[0].position === position) {
         setMonsterList((val) => val.slice(1));
@@ -29,7 +30,7 @@ const Game = (props) => {
         setFailPunish(true);
       }
     },
-    [monsterList, gameStart, failPunish, gameEnd, props.shot]
+    [monsterList, gameStart, failPunish, gameEnd, shotPlay]
   );
 
   //開始前倒數
@@ -68,14 +69,14 @@ const Game = (props) => {
   //失敗懲罰時間一秒
   useEffect(() => {
     if (!failPunish) return;
-    props.jumpPlay();
+    jumpPlay();
     const timer = setTimeout(() => {
       setFailPunish(false);
     }, 450);
     return () => {
       clearTimeout(timer);
     };
-  }, [failPunish, props.jump]);
+  }, [failPunish, jumpPlay]);
 
   //遊戲結束至結算頁
   useEffect(() => {
@@ -88,12 +89,12 @@ const Game = (props) => {
   //bgm
   useEffect(() => {
     if (!props.isClickStart) return navigate("/home");
-    if (gameEnd) return props.stop();
-    props.bgm();
+    if (gameEnd) return stop();
+    bgm();
     return () => {
-      props.stop();
+      stop();
     };
-  }, [props.isClickStart, props.bgm, navigate, gameEnd]);
+  }, [props.isClickStart, bgm, stop, navigate, gameEnd]);
 
   //電腦版按鍵事件
   useEffect(() => {
