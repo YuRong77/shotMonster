@@ -20,8 +20,7 @@ const Game = (props) => {
 
   const shotMonster = useCallback(
     (position) => {
-      props.shot.current.currentTime = 0;
-      props.shot.current.play();
+      props.shotPlay();
       if (!gameStart || failPunish || gameEnd) return;
       if (monsterList[0].position === position) {
         setMonsterList((val) => val.slice(1));
@@ -69,8 +68,7 @@ const Game = (props) => {
   //失敗懲罰時間一秒
   useEffect(() => {
     if (!failPunish) return;
-    props.jump.current.currentTime = 0;
-    props.jump.current.play();
+    props.jumpPlay();
     const timer = setTimeout(() => {
       setFailPunish(false);
     }, 450);
@@ -90,11 +88,10 @@ const Game = (props) => {
   //bgm
   useEffect(() => {
     if (!props.isClickStart) return navigate("/home");
-    if (gameEnd) return props.bgm.current.pause();
-    props.bgm.current.currentTime = 0;
-    props.bgm.current.play();
+    if (gameEnd) return props.stop();
+    props.bgm();
     return () => {
-      props.bgm.current.pause();
+      props.stop();
     };
   }, [props.isClickStart, props.bgm, navigate, gameEnd]);
 

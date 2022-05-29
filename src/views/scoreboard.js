@@ -39,8 +39,7 @@ const Scoreboard = (props) => {
     if (!countStart) return;
     if (pointList.length === 0) return setCountEnd(true);
     const timer = setInterval(() => {
-      props.eat.current.currentTime = 0;
-      props.eat.current.play();
+      props.eatPlay();
       setPoint((val) => val + pointList[0].level * 20);
       setPointList((val) => val.slice(1));
     }, 100);
@@ -80,7 +79,7 @@ const Scoreboard = (props) => {
             <div className="menuBtn">
               <div
                 onClick={() => {
-                  props.btn.current.play();
+                  props.btnPlay();
                   props.setIsClickStart(true);
                   navigate("/game");
                 }}
@@ -89,7 +88,7 @@ const Scoreboard = (props) => {
               </div>
               <div
                 onClick={() => {
-                  props.btn.current.play();
+                  props.btnPlay();
                   navigate("/home");
                 }}
               >

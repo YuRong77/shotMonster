@@ -4,7 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import useSound from "use-sound";
 import bgmMusic from "./assets/sound/bgm.mp3";
 import btnSound from "./assets/sound/btnSound.mp3";
 import shotSound from "./assets/sound/shot.mp3";
@@ -19,23 +20,11 @@ import "./assets/css/App.scss";
 function App() {
   const [isDesktop, setIsDesktop] = useState(true);
   const [isClickStart, setIsClickStart] = useState(false);
-  const btn = useRef(null);
-  const bgm = useRef(null);
-  const shot = useRef(null);
-  const jump = useRef(null);
-  const eat = useRef(null);
-
-  useEffect(() => {
-    eat.current.volume = 0.1;
-    shot.current.volume = 0.1;
-    jump.current.volume = 0.2;
-    bgm.current.volume = 0.04;
-    // btn.current.volume = 0;
-    // eat.current.volume = 0;
-    // shot.current.volume = 0;
-    // jump.current.volume = 0;
-    // bgm.current.volume = 0;
-  }, [btn, bgm, shot, jump, eat]);
+  const [bgm, { stop }] = useSound(bgmMusic, { volume: 0.05 });
+  const [btnPlay] = useSound(btnSound, { volume: 0.5 });
+  const [shotPlay] = useSound(shotSound, { volume: 0.1 });
+  const [jumpPlay] = useSound(jumpSound, { volume: 0.2 });
+  const [eatPlay] = useSound(eatSound, { volume: 0.1 });
 
   useEffect(() => {
     if (window.screen.width < 850) return setIsDesktop(false);
@@ -62,7 +51,7 @@ function App() {
               path="/home"
               element={
                 <Home
-                  btn={btn}
+                  btnPlay={btnPlay}
                   isDesktop={isDesktop}
                   setIsClickStart={setIsClickStart}
                 />
@@ -73,8 +62,9 @@ function App() {
               element={
                 <Game
                   bgm={bgm}
-                  shot={shot}
-                  jump={jump}
+                  stop={stop}
+                  shotPlay={shotPlay}
+                  jumpPlay={jumpPlay}
                   isClickStart={isClickStart}
                 />
               }
@@ -83,8 +73,8 @@ function App() {
               path="/scoreboard"
               element={
                 <Scoreboard
-                  btn={btn}
-                  eat={eat}
+                  btnPlay={btnPlay}
+                  eatPlay={eatPlay}
                   isClickStart={isClickStart}
                   setIsClickStart={setIsClickStart}
                 />
@@ -94,11 +84,6 @@ function App() {
           </Routes>
         </Router>
       </div>
-      <audio src={btnSound} ref={btn}></audio>
-      <audio src={shotSound} ref={shot}></audio>
-      <audio src={bgmMusic} ref={bgm}></audio>
-      <audio src={jumpSound} ref={jump}></audio>
-      <audio src={eatSound} ref={eat}></audio>
     </div>
   );
 }

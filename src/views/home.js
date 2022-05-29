@@ -12,7 +12,7 @@ const Home = (props) => {
         <div
           className="startBtn"
           onClick={() => {
-            props.btn.current.play();
+            props.btnPlay();
             props.setIsClickStart(true);
             navigate("/game");
           }}
