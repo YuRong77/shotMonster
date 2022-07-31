@@ -263,6 +263,9 @@ img {
           background-position: center;
           background-size: cover;
           box-shadow: inset 0 0 15px 5px #9c0000;
+          &:active {
+            filter: contrast(120%);
+          }
         }
       }
     }
